@@ -109,18 +109,21 @@ namespace ToneGenerator.AudioSource
 
 		private void GenerateWorkerThreadHandler()
 		{
+			const int samples = 800;
+			const int samplesBytes = samples * 2 * 2;
+
 			double t = 0;
 			double tincr = 0, amp = 0;
 
 			double currentFrequency = -1;
 			double currentVolume = -1;
 
-			IntPtr audioBuffer = Marshal.AllocHGlobal(800 * 2 * 2);
+			IntPtr audioBuffer = Marshal.AllocHGlobal(samplesBytes);
 			while (!needToStop.WaitOne(0, false))
 			{
-				if (circularBuffer.MaxLength - circularBuffer.Count >= 3200)
+				if (circularBuffer.MaxLength - circularBuffer.Count >= samplesBytes)
 				{
-					circularBuffer.Write(audioBuffer, 0, 3200);
+					circularBuffer.Write(audioBuffer, 0, samplesBytes);
 
 					if(currentFrequency != this.frequency)
 					{
@@ -136,7 +139,7 @@ namespace ToneGenerator.AudioSource
 					unsafe
 					{
 						short* q = (short*)audioBuffer.ToPointer();
-						for (int j = 0; j < 800; j++)
+						for (int j = 0; j < samples; j++)
 						{
 							int v = (int)(Math.Sin(t) * amp);
 							for (int k = 0; k < 2; k++)

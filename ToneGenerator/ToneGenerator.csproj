@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="AudioSource\ToneAudioRenderer.cs" />
     <Compile Include="AudioSource\CircularBuffer.cs" />
+    <Compile Include="ToneVisualizer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

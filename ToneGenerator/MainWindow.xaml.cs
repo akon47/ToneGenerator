@@ -35,6 +35,7 @@ namespace ToneGenerator
 		{
 			InitializeComponent();
 			ToneAudioRenderer = new ToneAudioRenderer();
+			
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
