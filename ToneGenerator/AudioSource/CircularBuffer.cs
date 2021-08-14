@@ -71,6 +71,31 @@ namespace ToneGenerator.AudioSource
 			}
 		}
 
+		public int WriteZero(int count)
+		{
+			lock (lockObject)
+			{
+				var bytesWritten = 0;
+				if (count > buffer.Length - byteCount)
+				{
+					count = buffer.Length - byteCount;
+				}
+				int writeToEnd = Math.Min(buffer.Length - writePosition, count);
+				Array.Clear(buffer, writePosition, writeToEnd);
+				writePosition += writeToEnd;
+				writePosition %= buffer.Length;
+				bytesWritten += writeToEnd;
+				if (bytesWritten < count)
+				{
+					Array.Clear(buffer, writePosition, count - bytesWritten);
+					writePosition += (count - bytesWritten);
+					bytesWritten = count;
+				}
+				byteCount += bytesWritten;
+				return bytesWritten;
+			}
+		}
+
 		public int Read(byte[] data, int offset, int count)
 		{
 			lock (lockObject)
