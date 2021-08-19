@@ -15,12 +15,12 @@ namespace ToneGenerator.AudioSource
 		static private Dictionary<string, string> friendlyNameCache = new Dictionary<string, string>();
 		static public IEnumerable<string> EnumerateDeviceNames()
 		{
-            using (MMDeviceEnumerator enumerator = new MMDeviceEnumerator())
-            {
-                int waveOutDevices = WaveOut.DeviceCount;
-                for (int waveOutDevice = 0; waveOutDevice < waveOutDevices; waveOutDevice++)
-                {
-                    WaveOutCapabilities deviceInfo = WaveOut.GetCapabilities(waveOutDevice);
+			using (MMDeviceEnumerator enumerator = new MMDeviceEnumerator())
+			{
+				int waveOutDevices = WaveOut.DeviceCount;
+				for (int waveOutDevice = 0; waveOutDevice < waveOutDevices; waveOutDevice++)
+				{
+					WaveOutCapabilities deviceInfo = WaveOut.GetCapabilities(waveOutDevice);
 					lock (friendlyNameCache)
 					{
 						if (friendlyNameCache.ContainsKey(deviceInfo.ProductName))
@@ -39,8 +39,8 @@ namespace ToneGenerator.AudioSource
 							}
 						}
 					}
-                }
-            }
+				}
+			}
 		}
 
 		private class NotificationClient : NAudio.CoreAudioApi.Interfaces.IMMNotificationClient
@@ -62,7 +62,7 @@ namespace ToneGenerator.AudioSource
 
 			void NAudio.CoreAudioApi.Interfaces.IMMNotificationClient.OnDefaultDeviceChanged(DataFlow flow, Role role, string defaultDeviceId)
 			{
-				if(flow == DataFlow.Render && role == Role.Console)
+				if (flow == DataFlow.Render && role == Role.Console)
 				{
 					needToReset?.Set();
 				}
@@ -85,7 +85,7 @@ namespace ToneGenerator.AudioSource
 		}
 
 		private double frequency = 1000d;
-		public double Frequency 
+		public double Frequency
 		{
 			get => frequency;
 			set => SetProperty(ref frequency, value);
@@ -125,12 +125,12 @@ namespace ToneGenerator.AudioSource
 				{
 					circularBuffer.Write(audioBuffer, 0, samplesBytes);
 
-					if(currentFrequency != this.frequency)
+					if (currentFrequency != this.frequency)
 					{
 						currentFrequency = this.frequency;
 						tincr = 2 * Math.PI * currentFrequency / 48000;
 					}
-					if(currentVolume != this.volume)
+					if (currentVolume != this.volume)
 					{
 						currentVolume = this.volume;
 						amp = 32767 * currentVolume;
@@ -183,9 +183,9 @@ namespace ToneGenerator.AudioSource
 							mmDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
 						else
 						{
-							foreach(var device in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
+							foreach (var device in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
 							{
-								if(currentRenderDeviceName.Contains(device.FriendlyName))
+								if (currentRenderDeviceName.Contains(device.FriendlyName))
 								{
 									mmDevice = device;
 									break;
