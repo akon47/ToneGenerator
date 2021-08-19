@@ -40,12 +40,11 @@ namespace ToneGenerator
 			new FrameworkPropertyMetadata(400, FrameworkPropertyMetadataOptions.AffectsRender));
 
 		private Pen centerLinePen = new Pen(Brushes.DarkGray, 1.0d);
-		private Pen graphPen = new Pen(Brushes.White, 1.0d);
+		private Pen graphPen = new Pen(Brushes.Yellow, 1.0d);
 
 		protected override void OnRender(DrawingContext dc)
 		{
 			base.OnRender(dc);
-
 
 			double centerY = ActualHeight / 2.0d;
 			double tincr = 2 * Math.PI * Frequency / 48000;
@@ -57,7 +56,6 @@ namespace ToneGenerator
 			{
 				double v = (Math.Sin(i * tincr) * Volume);
 				Point endPoint = new Point((ActualWidth / Samples) * i, (centerY + (v * centerY)));
-				//pathGeometry.AddGeometry(new EllipseGeometry(endPoint, 1, 1));
 				pathGeometry.AddGeometry(new LineGeometry(startPoint, endPoint));
 				startPoint = endPoint;
 			}

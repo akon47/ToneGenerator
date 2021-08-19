@@ -91,6 +91,13 @@ namespace ToneGenerator.AudioSource
 			set => SetProperty(ref frequency, value);
 		}
 
+		private bool isMuted = true;
+		public bool IsMuted
+		{
+			get => isMuted;
+			set => SetProperty(ref isMuted, value);
+		}
+
 		private CircularBuffer circularBuffer;
 		private Thread renderWorkerThread, generateWorkerThread;
 		private ManualResetEvent needToStop;
@@ -123,7 +130,14 @@ namespace ToneGenerator.AudioSource
 			{
 				if (circularBuffer.MaxLength - circularBuffer.Count >= samplesBytes)
 				{
-					circularBuffer.Write(audioBuffer, 0, samplesBytes);
+					if (this.isMuted)
+					{
+						circularBuffer.WriteZero(samplesBytes);
+					}
+					else
+					{
+						circularBuffer.Write(audioBuffer, 0, samplesBytes);
+					}
 
 					if (currentFrequency != this.frequency)
 					{
